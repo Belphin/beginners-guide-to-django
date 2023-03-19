@@ -1,8 +1,14 @@
 version: "3"
 services:
-  web:
+  web-app:
     container_name: myproject
-    build: .
+    build:
+      context: .
+    working_dir: /var/www/myproject
     ports:
-      - "8000:8000"
-    restart: on-failure
+      - "$PORT:$PORT"
+    volumes:
+      - ./:/var/www/myproject
+    command: python3 manage.py runserver 0.0.0.0:$PORT
+    env_file:
+      - .env

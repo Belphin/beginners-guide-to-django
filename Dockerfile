@@ -1,14 +1,5 @@
-FROM python:3
+FROM python:3.10.6
 
-RUN apt update && apt upgrade -y && apt autoremove && apt autoclean
-
-RUN mkdir /myproject
-COPY . /myproject/
-WORKDIR /myproject
-
-RUN pip install --upgrade pip
-RUN pip install django
-RUN pip install django-widget-tweaks
-
-ENTRYPOINT [ "python", "manage.py" ]
-CMD [ "runserver", "0.0.0.0:8000" ]
+ADD ./requirements.txt /tmp/requirements.txt
+RUN pip install -r /tmp/requirements.txt
+RUN apt update && apt upgrade -y
