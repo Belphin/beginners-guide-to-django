@@ -18,6 +18,14 @@
 
   - `docker-compose run server python manage.py migrate`
 
+- ### Create superuser
+
+  - `docker compose run server python manage.py createsuperuser`
+
 - ### Run docker
 
   - `docker-compose up`
+
+- ### Run tests
+
+  - `docker compose run server python manage.py test`
