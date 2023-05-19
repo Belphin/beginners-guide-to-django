@@ -22,6 +22,10 @@
 
   - `docker compose run server python manage.py createsuperuser`
 
+- ### Django shell
+
+  - `docker compose run server python manage.py shell`
+
 - ### Run docker
 
   - `docker-compose up`
