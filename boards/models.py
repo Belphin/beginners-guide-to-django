@@ -22,8 +22,8 @@ class Board(models.Model):
 class Topic(models.Model):
 	subject = models.CharField(max_length=255)
 	last_updated = models.DateTimeField(auto_now_add=True)
-	board = models.ForeignKey(Board, related_name='topics', on_delete=models.DO_NOTHING,)
-	starter = models.ForeignKey(User, related_name='topics', on_delete=models.DO_NOTHING,)
+	board = models.ForeignKey(Board, null=True, related_name='topics', on_delete=models.CASCADE,)
+	starter = models.ForeignKey(User, null=True, related_name='topics', on_delete=models.CASCADE,)
 	views = models.PositiveIntegerField(default=0)
 
 	def __str__(self):
@@ -51,11 +51,11 @@ class Topic(models.Model):
 
 class Post(models.Model):
 	message = models.TextField(max_length=4000)
-	topic = models.ForeignKey(Topic, related_name='posts', on_delete=models.DO_NOTHING,)
+	topic = models.ForeignKey(Topic, null=True, related_name='posts', on_delete=models.CASCADE,)
 	created_at = models.DateTimeField(auto_now_add=True)
 	updated_at = models.DateTimeField(null=True)
-	created_by = models.ForeignKey(User, related_name='posts', on_delete=models.DO_NOTHING,)
-	updated_by = models.ForeignKey(User, null=True, related_name='+', on_delete=models.DO_NOTHING,)
+	created_by = models.ForeignKey(User, null=True, related_name='posts', on_delete=models.CASCADE,)
+	updated_by = models.ForeignKey(User, null=True, related_name='+', on_delete=models.CASCADE,)
 
 	def __str__(self):
 		truncated_message = Truncator(self.message)
