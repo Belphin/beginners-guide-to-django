@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.urls import reverse, resolve
 from django.test import TestCase
 from ..views import new_topic
@@ -8,7 +8,9 @@ from ..forms import NewTopicForm
 class NewTopicTest(TestCase):
 	def setUp(self):
 		Board.objects.create(name='Django', description='Django board.')
-		User.objects.create_user(username='test', email='test@example.com', password='123')
+		user = User.objects.create_user(username='test', email='test@example.com', password='123')
+		group, created = Group.objects.get_or_create(name="blogger")
+		user.groups.add(group)
 		self.client.login(username='test', password='123')
 
 	def test_new_topic_view_success_status_code(self):

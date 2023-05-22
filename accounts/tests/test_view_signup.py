@@ -31,7 +31,8 @@ class SuccessfulSignUpTests(TestCase):
 			'username': 'test',
 			'email': 'test@example.com',
 			'password1': 'abcdef123456',
-			'password2': 'abcdef123456'
+			'password2': 'abcdef123456',
+			'role': 'blogger'
 		}
 		self.response = self.client.post(url, data)
 		self.home_url = reverse('home')
