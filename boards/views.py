@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.db.models import Count
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.generic import UpdateView, ListView
 from django.utils import timezone
 from django.utils.decorators import method_decorator
@@ -32,7 +32,7 @@ class TopicListView(ListView):
 		return queryset
 
 
-@login_required
+@user_passes_test(lambda u: u.groups.filter(name='blogger').exists())
 def new_topic(request, pk):
 	board = get_object_or_404(Board, pk=pk)
 	user = User.objects.first()
