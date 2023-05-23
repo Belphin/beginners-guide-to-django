@@ -9,9 +9,6 @@ from ..views import PostUpdateView
 
 
 class PostUpdateViewTestCase(TestCase):
-		'''
-		Base test case to be used in all `PostUpdateView` view tests
-		'''
 		def setUp(self):
 				self.board = Board.objects.create(name='Django', description='Django board.')
 				self.username = 'john'
@@ -43,10 +40,6 @@ class UnauthorizedPostUpdateViewTests(PostUpdateViewTestCase):
 				self.response = self.client.get(self.url)
 
 		def test_status_code(self):
-				'''
-				A topic should be edited only by the owner.
-				Unauthorized users should get a 404 response (Page Not Found)
-				'''
 				self.assertEquals(self.response.status_code, 404)
 
 
@@ -71,9 +64,6 @@ class PostUpdateViewTests(PostUpdateViewTestCase):
 				self.assertIsInstance(form, ModelForm)
 
 		def test_form_inputs(self):
-				'''
-				The view must contain two inputs: csrf, message textarea
-				'''
 				self.assertContains(self.response, '<input', 1)
 				self.assertContains(self.response, '<textarea', 1)
 
@@ -85,9 +75,6 @@ class SuccessfulPostUpdateViewTests(PostUpdateViewTestCase):
 				self.response = self.client.post(self.url, {'message': 'edited message'})
 
 		def test_redirection(self):
-				'''
-				A valid form submission should redirect the user
-				'''
 				topic_posts_url = reverse('topic_posts', kwargs={'pk': self.board.pk, 'topic_pk': self.topic.pk})
 				self.assertRedirects(self.response, topic_posts_url)
 
@@ -98,17 +85,11 @@ class SuccessfulPostUpdateViewTests(PostUpdateViewTestCase):
 
 class InvalidPostUpdateViewTests(PostUpdateViewTestCase):
 		def setUp(self):
-				'''
-				Submit an empty dictionary to the `reply_topic` view
-				'''
 				super().setUp()
 				self.client.login(username=self.username, password=self.password)
 				self.response = self.client.post(self.url, {})
 
 		def test_status_code(self):
-				'''
-				An invalid form submission should return to the same page
-				'''
 				self.assertEquals(self.response.status_code, 200)
 
 		def test_form_errors(self):
