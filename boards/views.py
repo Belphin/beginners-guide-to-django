@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.db.models import Count
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.generic import UpdateView, ListView
 from django.utils import timezone
 from django.utils.decorators import method_decorator
@@ -23,8 +23,14 @@ class TopicListView(ListView):
 	template_name = 'topics.html'
 	paginate_by = 20
 
+	def user_can_edit(self, **kwargs):
+		user = self.request.user
+		can_edit = user.groups.filter(name='blogger').exists()
+		return can_edit
+
 	def get_context_data(self, **kwargs):
 		kwargs['board'] = self.board
+		kwargs['user_can_edit'] = self.user_can_edit()
 		return super().get_context_data(**kwargs)
 
 	def get_queryset(self):
@@ -33,7 +39,7 @@ class TopicListView(ListView):
 		return queryset
 
 
-@login_required
+@user_passes_test(lambda u: u.groups.filter(name='blogger').exists())
 def new_topic(request, pk):
 	board = get_object_or_404(Board, pk=pk)
 	user = User.objects.first()

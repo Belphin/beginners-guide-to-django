@@ -12,9 +12,11 @@
 {% endblock %}
 
 {% block content %}
-  <div class="mb-4">
-    <a href="{% url 'new_topic' board.pk %}" class="btn btn-primary">New topic</a>
-  </div>
+  {% if user_can_edit %}
+    <div class="mb-4">
+      <a href="{% url 'new_topic' board.pk %}" class="btn btn-primary">New topic</a>
+    </div>
+  {% endif %}
 
   <table class="table table-striped mb-4">
     <thead class="thead-inverse">
