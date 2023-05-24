@@ -24,8 +24,9 @@ class TopicListView(ListView):
 	paginate_by = 20
 
 	def user_can_edit(self, **kwargs):
-		user = self.request.user
-		can_edit = user.groups.filter(name='blogger').exists()
+		if not hasattr(self.request.user, "account"): return False
+		account = self.request.user.account
+		can_edit = int(account.role)
 		return can_edit
 
 	def get_context_data(self, **kwargs):
@@ -39,7 +40,7 @@ class TopicListView(ListView):
 		return queryset
 
 
-@user_passes_test(lambda u: u.groups.filter(name='blogger').exists())
+@user_passes_test(lambda u: int(u.account.role))
 def new_topic(request, pk):
 	board = get_object_or_404(Board, pk=pk)
 	user = User.objects.first()

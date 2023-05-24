@@ -7,12 +7,16 @@ from .forms import SignUpForm
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import UpdateView
+from .models import Account
 
 def signup(request):
 	if request.method == 'POST':
 		form = SignUpForm(request.POST)
 		if form.is_valid():
 			user = form.save()
+			role = form.cleaned_data['role']
+			account = Account.objects.create(user=user, role=role)
+			account.save()
 			login(request, user)
 			return redirect('home')
 	else:
